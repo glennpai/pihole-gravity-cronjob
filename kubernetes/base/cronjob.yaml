@@ -5,7 +5,7 @@ metadata:
 spec:
   schedule: "0 4 * * *"
   suspend: true
-  timezone: "America/New_York"
+  timeZone: "America/New_York"
   startingDeadlineSeconds: 3600
   concurrencyPolicy: Forbid
   jobTemplate:

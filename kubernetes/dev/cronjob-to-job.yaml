@@ -11,7 +11,7 @@
 - op: remove
   path: /spec/suspend
 - op: remove
-  path: /spec/timezone
+  path: /spec/timeZone
 - op: remove
   path: /spec/startingDeadlineSeconds
 - op: remove
