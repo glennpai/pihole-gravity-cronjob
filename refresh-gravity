@@ -1,0 +1,31 @@
+#!/bin/bash
+
+if [ -z "${APP_HOST}" ]; then
+  echo "Error: APP_HOST is not set"
+  exit 1
+fi
+
+if [ -z "${APP_PWD}" ]; then
+  echo "Error: APP_PWD is not set"
+  exit 1
+fi
+
+echo "Authenticating..."
+AUTH_RES=$(curl -s -X POST -H "Content-Type: application/json" -d "{\"password\":\"${APP_PWD}\"}" ${APP_HOST}/api/auth)
+SID=$(echo ${AUTH_RES} | jq -r '.session.sid')
+
+if [ -z "${SID}" ]; then
+  echo "Error: Failed to authenticate. Please verify APP_PWD and APP_HOST and try again."
+  exit 1
+fi
+
+echo "Refreshing gravity..."
+curl -s -X POST -H "Content-Type: application/json" -d "{\"sid\":\"${SID}\"}" ${APP_HOST}/api/action/gravity
+
+if [ $? -ne 0 ]; then
+  echo "Error: Failed to refresh gravity."
+  exit 1
+fi
+
+echo "Refreshed successfully"
+exit 0

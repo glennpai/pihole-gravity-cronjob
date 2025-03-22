@@ -1,0 +1,32 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: pihole-gravity
+spec:
+  schedule: "0 4 * * *"
+  suspend: true
+  timezone: "America/New_York"
+  startingDeadlineSeconds: 3600
+  concurrencyPolicy: Forbid
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: pihole-gravity
+            image: ghcr.io/glennpai/pihole-gravity
+            imagePullPolicy: IfNotPresent
+            env:
+              - name: APP_PWD
+                valueFrom:
+                  secretKeyRef:
+                    name: pihole-gravity-secret
+                    key: pwd
+              - name: APP_HOST
+                valueFrom:
+                  secretKeyRef:
+                    name: pihole-gravity-secret
+                    key: host
+          restartPolicy: Never
+          imagePullSecrets:
+            - name: ghcr
